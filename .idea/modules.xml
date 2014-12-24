@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/OPFUtils.iml" filepath="$PROJECT_DIR$/OPFUtils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/opfutils/opfutils.iml" filepath="$PROJECT_DIR$/opfutils/opfutils.iml" />
+    </modules>
+  </component>
+</project>
+
