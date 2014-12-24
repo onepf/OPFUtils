@@ -144,7 +144,7 @@ public final class OPFUtils {
      * @return true if the application with the passed package is the installer.
      */
     public static boolean isPackageInstaller(@NonNull final Context context,
-                                             final String packageName) {
+                                             @Nullable final String packageName) {
         final PackageManager packageManager = context.getPackageManager();
         final String appPackageName = context.getPackageName();
         final String installerPackageName = packageManager.getInstallerPackageName(appPackageName);
