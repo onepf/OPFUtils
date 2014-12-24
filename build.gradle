@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-
-apply plugin: 'idea'
-
 task wrapper(type: Wrapper) {
     gradleVersion '2.1'
 }
@@ -42,8 +39,4 @@ allprojects {
         compileSdkVersion = 21
         buildToolsVersion = "21.1.2"
     }
-}
-
-def isReleaseBuild() {
-    return !VERSION_NAME.endsWith("SNAPSHOT")
 }

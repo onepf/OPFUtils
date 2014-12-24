@@ -17,6 +17,7 @@
 apply plugin: 'idea'
 apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.library'
+apply from: 'https://raw.githubusercontent.com/onepf/OPF-mvn-repo/master/OPF-mvn-push.gradle'
 
 android {
     compileSdkVersion project.compileSdkVersion
@@ -26,7 +27,7 @@ android {
         minSdkVersion 10
         targetSdkVersion 21
         versionCode 1
-        versionName "0.1-SNAPSHOT"
+        versionName "0.1.1-SNAPSHOT"
     }
 
     buildTypes {
