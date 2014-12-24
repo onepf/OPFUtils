@@ -7,9 +7,10 @@ Common utils used among OPF libraries.
 ```groovy
 allprojects {
     repositories {
-    ...
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
-  }
+        ...
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    }
+}
 ```
 
 * Add dependency
