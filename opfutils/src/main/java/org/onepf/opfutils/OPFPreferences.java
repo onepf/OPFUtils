@@ -121,6 +121,10 @@ public class OPFPreferences {
         preferences.edit().remove(key).apply();
     }
 
+    private static void clear(@NonNull final SharedPreferences sharedPreferences) {
+        sharedPreferences.edit().clear().apply();
+    }
+
     @NonNull
     private final Context context;
 
@@ -338,5 +342,10 @@ public class OPFPreferences {
 
     public void remove(@NonNull final String key) {
         remove(preferences, key);
+    }
+
+    public void clear() {
+        clear(preferences);
+        clear(defaultPreferences);
     }
 }
