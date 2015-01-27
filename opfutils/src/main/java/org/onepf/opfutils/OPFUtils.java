@@ -60,15 +60,16 @@ public final class OPFUtils {
      *
      * @return If find app - return it's version code, else {@link Integer#MIN_VALUE}.
      */
-    public static int getAppVersion(@NonNull final Context context)
-            throws PackageManager.NameNotFoundException {
-
-        final PackageInfo packageInfo = context.getPackageManager()
-                .getPackageInfo(context.getPackageName(), 0);
-        if (packageInfo == null) {
-            throw new PackageManager.NameNotFoundException(context.getPackageName());
+    public static int getAppVersion(@NonNull final Context context) {
+        try {
+            final PackageInfo packageInfo = context.getPackageManager()
+                    .getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            // ignore
         }
-        return packageInfo.versionCode;
+
+        return Integer.MIN_VALUE;
     }
 
     /**
