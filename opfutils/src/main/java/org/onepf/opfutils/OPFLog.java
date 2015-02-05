@@ -112,10 +112,6 @@ public final class OPFLog {
     }
 
 
-    public static void init(@NonNull final Class clazz) {
-        init(clazz.getSimpleName());
-    }
-
     public static void init(@NonNull final String tag) {
         if (TextUtils.isEmpty(tag)) {
             throw new IllegalArgumentException("Log tag can't be empty.");
