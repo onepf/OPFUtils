@@ -17,9 +17,6 @@
 package org.onepf.opfutils;
 
 
-import android.support.annotation.NonNull;
-
-import org.onepf.opfutils.exception.InitException;
 import org.onepf.opfutils.exception.WrongThreadException;
 
 public final class OPFChecks {
@@ -32,13 +29,6 @@ public final class OPFChecks {
         final boolean isMainThread = OPFUtils.isMainThread();
         if (mainThreadExpected != isMainThread) {
             throw new WrongThreadException(mainThreadExpected);
-        }
-    }
-
-    public static void checkInit(@NonNull final Checkable checkInit, final boolean initExpected) {
-        final boolean init = checkInit.check();
-        if (init != initExpected) {
-            throw new InitException(initExpected);
         }
     }
 }

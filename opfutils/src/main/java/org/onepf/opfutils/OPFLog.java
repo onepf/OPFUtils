@@ -21,6 +21,8 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
+import org.onepf.opfutils.exception.InitException;
+
 import static android.util.Log.DEBUG;
 import static android.util.Log.ERROR;
 import static android.util.Log.INFO;
@@ -32,15 +34,15 @@ public final class OPFLog {
     private static boolean enabled = false;
     @Nullable
     private static String tag = null;
-    private static final Checkable CHECK_INIT = new Checkable() {
-        @Override
-        public boolean check() {
-            return !TextUtils.isEmpty(tag);
-        }
-    };
 
     private OPFLog() {
         throw new UnsupportedOperationException();
+    }
+
+    private static void checkInit() {
+        if (TextUtils.isEmpty(tag)) {
+            throw new InitException(false);
+        }
     }
 
     private static boolean shouldLog(final int level) {
@@ -53,7 +55,7 @@ public final class OPFLog {
 
     private static void log(final int level,
                             @Nullable final String message) {
-        OPFChecks.checkInit(CHECK_INIT, true);
+        checkInit();
         if (shouldLog(level)) {
             Log.println(level, tag, "" + message);
         }
@@ -62,7 +64,7 @@ public final class OPFLog {
     private static void log(final int level,
                             @Nullable final String message,
                             @NonNull final Throwable throwable) {
-        OPFChecks.checkInit(CHECK_INIT, true);
+        checkInit();
         if (shouldLog(level)) {
             Log.println(level, tag, message + "\n" + Log.getStackTraceString(throwable));
         }
@@ -71,14 +73,14 @@ public final class OPFLog {
     private static void log(final int level,
                             @NonNull final String messageFormat,
                             @Nullable final Object... args) {
-        OPFChecks.checkInit(CHECK_INIT, true);
+        checkInit();
         if (shouldLog(level)) {
             Log.println(level, tag, String.format(messageFormat, args));
         }
     }
 
     private static void logMethod(final int level, @Nullable final Object... args) {
-        OPFChecks.checkInit(CHECK_INIT, true);
+        checkInit();
         if (shouldLog(level)) {
             Log.println(level, tag, getMethodLog(args));
         }
@@ -116,7 +118,9 @@ public final class OPFLog {
         if (TextUtils.isEmpty(tag)) {
             throw new IllegalArgumentException("Log tag can't be empty.");
         }
-        OPFChecks.checkInit(CHECK_INIT, false);
+        if (!TextUtils.isEmpty(OPFLog.tag)) {
+            throw new InitException(true);
+        }
         OPFLog.tag = tag;
     }
 

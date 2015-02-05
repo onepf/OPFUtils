@@ -18,12 +18,9 @@ package org.onepf.opfutils.exception;
 
 public class InitException extends IllegalStateException {
 
-    private final boolean notInit;
-
-    public InitException(final boolean notInit) {
-        super(notInit
-                      ? "You must call init() first."
-                      : "init() was already called.");
-        this.notInit = notInit;
+    public InitException(final boolean isInit) {
+        super(isInit
+                      ? "init() was already called."
+                      : "You must call init() first.");
     }
 }
