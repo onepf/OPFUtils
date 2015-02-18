@@ -30,8 +30,6 @@ public class OPFPreferences {
     private static final String KEY_LONG = "long";
     private static final String KEY_FLOAT = "float";
 
-    private static final int MODE = Context.MODE_PRIVATE;
-
     private static final String POSTFIX_DEFAULT = ".default";
 
     private static void put(@NonNull final SharedPreferences preferences,
@@ -134,13 +132,21 @@ public class OPFPreferences {
     @NonNull
     private final SharedPreferences defaultPreferences;
 
-    public OPFPreferences(@NonNull final Context context, @Nullable String postfix) {
+    public OPFPreferences(@NonNull final Context context, @Nullable String postfix, final int mode) {
         this.context = context.getApplicationContext();
         postfix = TextUtils.isEmpty(postfix) ? "" : "." + postfix;
         final String packageName = context.getPackageName();
         final String name = packageName + postfix;
-        preferences = context.getSharedPreferences(name, MODE);
-        defaultPreferences = context.getSharedPreferences(name + POSTFIX_DEFAULT, MODE);
+        preferences = context.getSharedPreferences(name, mode);
+        defaultPreferences = context.getSharedPreferences(name + POSTFIX_DEFAULT, mode);
+    }
+
+    public OPFPreferences(@NonNull final Context context, @Nullable String postfix) {
+        this(context, postfix, Context.MODE_PRIVATE);
+    }
+
+    public OPFPreferences(@NonNull final Context context, final int mode) {
+        this(context, null, mode);
     }
 
     public OPFPreferences(@NonNull final Context context) {
