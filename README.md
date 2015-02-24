@@ -15,5 +15,5 @@ allprojects {
 
 * Add dependency
 ```groovy
-compile 'org.onepf:opfutils:0.1.8-SNAPSHOT'
+compile 'org.onepf:opfutils:0.1.11'
 ```
