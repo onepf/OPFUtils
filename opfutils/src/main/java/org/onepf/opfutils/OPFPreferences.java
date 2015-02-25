@@ -142,7 +142,7 @@ public class OPFPreferences {
     }
 
     public OPFPreferences(@NonNull final Context context, @Nullable String postfix) {
-        this(context, postfix, Context.MODE_PRIVATE);
+        this(context, postfix, Context.MODE_MULTI_PROCESS);
     }
 
     public OPFPreferences(@NonNull final Context context, final int mode) {
