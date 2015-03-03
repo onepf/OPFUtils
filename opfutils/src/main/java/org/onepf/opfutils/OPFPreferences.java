@@ -51,14 +51,13 @@ public class OPFPreferences {
         preferences.edit().putBoolean(key, value).apply();
     }
 
-    @NonNull
     private static Boolean getBoolean(@NonNull final SharedPreferences preferences,
                                       @NonNull final String key,
-                                      @NonNull final Boolean defValue) {
+                                      @Nullable final Boolean defValue) {
         if (!contains(preferences, key)) {
             return defValue;
         }
-        return preferences.getBoolean(key, defValue);
+        return preferences.getBoolean(key, false);
     }
 
     private static void put(@NonNull final SharedPreferences preferences,
@@ -67,14 +66,13 @@ public class OPFPreferences {
         preferences.edit().putInt(key, value).apply();
     }
 
-    @NonNull
     private static Integer getInt(@NonNull final SharedPreferences preferences,
                                   @NonNull final String key,
-                                  @NonNull final Integer defValue) {
+                                  @Nullable final Integer defValue) {
         if (!contains(preferences, key)) {
             return defValue;
         }
-        return preferences.getInt(key, defValue);
+        return preferences.getInt(key, 0);
     }
 
     private static void put(@NonNull final SharedPreferences preferences,
@@ -83,14 +81,13 @@ public class OPFPreferences {
         preferences.edit().putLong(key, value).apply();
     }
 
-    @NonNull
     private static Long getLong(@NonNull final SharedPreferences preferences,
                                 @NonNull final String key,
-                                @NonNull final Long defValue) {
+                                @Nullable final Long defValue) {
         if (!contains(preferences, key)) {
             return defValue;
         }
-        return preferences.getLong(key, defValue);
+        return preferences.getLong(key, 0L);
     }
 
     private static void put(@NonNull final SharedPreferences preferences,
@@ -99,14 +96,13 @@ public class OPFPreferences {
         preferences.edit().putFloat(key, value).apply();
     }
 
-    @NonNull
     private static Float getFloat(@NonNull final SharedPreferences preferences,
                                   @NonNull final String key,
-                                  @NonNull final Float defValue) {
+                                  @Nullable final Float defValue) {
         if (!contains(preferences, key)) {
             return defValue;
         }
-        return preferences.getFloat(key, defValue);
+        return preferences.getFloat(key, 0F);
     }
 
     private static boolean contains(@NonNull final SharedPreferences preferences,
@@ -123,12 +119,11 @@ public class OPFPreferences {
         sharedPreferences.edit().clear().apply();
     }
 
+
     @NonNull
     private final Context context;
-
     @NonNull
     private final SharedPreferences preferences;
-
     @NonNull
     private final SharedPreferences defaultPreferences;
 
