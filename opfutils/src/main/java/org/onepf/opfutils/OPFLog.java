@@ -28,8 +28,8 @@ import static android.util.Log.WARN;
 
 public final class OPFLog {
 
-    @Nullable
     private static final String TAG = "OPF";
+    private static final String packageName = OPFLog.class.getPackage().getName();
     private static boolean enabled = false;
 
     private OPFLog() {
@@ -74,9 +74,18 @@ public final class OPFLog {
         }
     }
 
+    private static StackTraceElement getTraceElement(@NonNull final StackTraceElement[] stackTrace) {
+        for (final StackTraceElement element : stackTrace) {
+            if (!element.getClassName().startsWith(packageName)) {
+                return element;
+            }
+        }
+        return stackTrace[stackTrace.length - 1];
+    }
+
     private static String getMethodLog(@Nullable final Object... args) {
-        final int callerMethodDepth = 5;
-        final StackTraceElement traceElement = Thread.currentThread().getStackTrace()[callerMethodDepth];
+        final StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        final StackTraceElement traceElement = getTraceElement(stackTrace);
         final String className = traceElement.getClassName();
         final String simpleClassName = className.replaceAll(".*\\.", "");
         final String methodName = traceElement.getMethodName();
