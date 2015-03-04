@@ -24,7 +24,6 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -46,8 +45,10 @@ public final class OPFUtils {
      * Check current connection state.
      * <p/>
      * Having this method return true doesn't mean internet connection is available.
+     *
      * @param context Context object to obtain {@link android.net.ConnectivityManager} from.
      * @return true if there's an active connection, false otherwise.
+     * @throws java.lang.SecurityException if caller doesn't have {@link android.Manifest.permission#ACCESS_NETWORK_STATE} permission.
      */
     public static boolean isConnected(@NonNull final Context context) {
         final Object service = context.getSystemService(Context.CONNECTIVITY_SERVICE);
