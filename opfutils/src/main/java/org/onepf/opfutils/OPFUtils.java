@@ -34,8 +34,6 @@ public final class OPFUtils {
 
     private static final String ITEM_DIVIDER = ", ";
 
-    private static final Handler HANDLER = new Handler(Looper.getMainLooper());
-
     private OPFUtils() {
         throw new UnsupportedOperationException();
     }
@@ -44,15 +42,18 @@ public final class OPFUtils {
         return Looper.getMainLooper().getThread() == Thread.currentThread();
     }
 
-    public static void post(@NonNull final Runnable runnable) {
-        HANDLER.post(runnable);
-    }
-
-    public static boolean isNetworkConnected(@NonNull final Context context) {
-        final ConnectivityManager cm = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        final NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    /**
+     * Check current connection state.
+     * <p/>
+     * Having this method return true doesn't mean internet connection is available.
+     * @param context Context object to obtain {@link android.net.ConnectivityManager} from.
+     * @return true if there's an active connection, false otherwise.
+     */
+    public static boolean isConnected(@NonNull final Context context) {
+        final Object service = context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        final ConnectivityManager cm = (ConnectivityManager) service;
+        final NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnected();
     }
 
     /**
