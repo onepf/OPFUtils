@@ -74,9 +74,12 @@ public final class OPFLog {
         }
     }
 
-    private static StackTraceElement getTraceElement(@NonNull final StackTraceElement[] stackTrace) {
-        for (final StackTraceElement element : stackTrace) {
-            if (!element.getClassName().startsWith(packageName)) {
+    private static StackTraceElement getTraceElement(
+            @NonNull final StackTraceElement[] stackTrace) {
+        for (int i = 0; i < stackTrace.length - 1; i++) {
+            final StackTraceElement element = stackTrace[i + 1];
+            if (stackTrace[i].getClassName().startsWith(packageName)
+                    && !element.getClassName().startsWith(packageName)) {
                 return element;
             }
         }

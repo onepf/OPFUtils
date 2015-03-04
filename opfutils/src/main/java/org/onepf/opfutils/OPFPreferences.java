@@ -24,14 +24,6 @@ import android.text.TextUtils;
 
 public class OPFPreferences {
 
-    private static final String KEY_STRING = "string";
-    private static final String KEY_BOOLEAN = "boolean";
-    private static final String KEY_INT = "integer";
-    private static final String KEY_LONG = "long";
-    private static final String KEY_FLOAT = "float";
-
-    private static final String POSTFIX_DEFAULT = ".default";
-
     private static void put(@NonNull final SharedPreferences preferences,
                             @NonNull final String key,
                             @NonNull final String value) {
@@ -124,24 +116,18 @@ public class OPFPreferences {
     private final Context context;
     @NonNull
     private final SharedPreferences preferences;
-    @NonNull
-    private final SharedPreferences defaultPreferences;
 
-    public OPFPreferences(@NonNull final Context context, @Nullable String postfix, final int mode) {
+    public OPFPreferences(@NonNull final Context context, @Nullable String postfix,
+                          final int mode) {
         this.context = context.getApplicationContext();
         postfix = TextUtils.isEmpty(postfix) ? "" : "." + postfix;
         final String packageName = context.getPackageName();
         final String name = packageName + postfix;
         preferences = context.getSharedPreferences(name, mode);
-        defaultPreferences = context.getSharedPreferences(name + POSTFIX_DEFAULT, mode);
     }
 
     public OPFPreferences(@NonNull final Context context, @Nullable String postfix) {
         this(context, postfix, Context.MODE_MULTI_PROCESS);
-    }
-
-    public OPFPreferences(@NonNull final Context context, final int mode) {
-        this(context, null, mode);
     }
 
     public OPFPreferences(@NonNull final Context context) {
@@ -158,13 +144,8 @@ public class OPFPreferences {
         return preferences;
     }
 
-
     public void put(@NonNull final String key, @NonNull final String value) {
         put(preferences, key, value);
-    }
-
-    public void putString(@NonNull final String value) {
-        put(defaultPreferences, KEY_STRING, value);
     }
 
     @NonNull
@@ -178,33 +159,12 @@ public class OPFPreferences {
         return getString(key, null);
     }
 
-    @SuppressWarnings("ConstantConditions")
-    @Nullable
-    public String getString() {
-        return getString(defaultPreferences, KEY_STRING, null);
-    }
-
-    public boolean containsString() {
-        return contains(defaultPreferences, KEY_STRING);
-    }
-
-
-    public void removeString() {
-        remove(defaultPreferences, KEY_STRING);
-    }
-
-    public void put(@NonNull final String key,
-                    final boolean value) {
+    public void put(@NonNull final String key, final boolean value) {
         put(preferences, key, value);
     }
 
-    public void putBoolean(final boolean value) {
-        put(defaultPreferences, KEY_BOOLEAN, value);
-    }
-
     @NonNull
-    public Boolean getBoolean(@NonNull final String key,
-                              @NonNull final Boolean defValue) {
+    public Boolean getBoolean(@NonNull final String key, @NonNull final Boolean defValue) {
         return getBoolean(preferences, key, defValue);
     }
 
@@ -214,28 +174,9 @@ public class OPFPreferences {
         return getBoolean(key, null);
     }
 
-    @SuppressWarnings("ConstantConditions")
-    @Nullable
-    public Boolean getBoolean() {
-        return getBoolean(defaultPreferences, KEY_BOOLEAN, null);
-    }
-
-    public boolean containsBoolean() {
-        return contains(defaultPreferences, KEY_BOOLEAN);
-    }
-
-
-    public void removeBoolean() {
-        remove(defaultPreferences, KEY_BOOLEAN);
-    }
-
     public void put(@NonNull final String key,
                     final int value) {
         put(preferences, key, value);
-    }
-
-    public void putInt(final int value) {
-        put(defaultPreferences, KEY_INT, value);
     }
 
     @NonNull
@@ -250,28 +191,9 @@ public class OPFPreferences {
         return getInt(key, null);
     }
 
-    @SuppressWarnings("ConstantConditions")
-    @Nullable
-    public Integer getInt() {
-        return getInt(defaultPreferences, KEY_INT, null);
-    }
-
-    public boolean containsInt() {
-        return contains(defaultPreferences, KEY_INT);
-    }
-
-
-    public void removeInt() {
-        remove(defaultPreferences, KEY_INT);
-    }
-
     public void put(@NonNull final String key,
                     final long value) {
         put(preferences, key, value);
-    }
-
-    public void putLong(final long value) {
-        put(defaultPreferences, KEY_LONG, value);
     }
 
     @NonNull
@@ -286,28 +208,9 @@ public class OPFPreferences {
         return getLong(key, null);
     }
 
-    @SuppressWarnings("ConstantConditions")
-    @Nullable
-    public Long getLong() {
-        return getLong(defaultPreferences, KEY_LONG, null);
-    }
-
-    public boolean containsLong() {
-        return contains(defaultPreferences, KEY_LONG);
-    }
-
-
-    public void removeLong() {
-        remove(defaultPreferences, KEY_LONG);
-    }
-
     public void put(@NonNull final String key,
                     final float value) {
         put(preferences, key, value);
-    }
-
-    public void putFloat(final float value) {
-        put(defaultPreferences, KEY_FLOAT, value);
     }
 
     @NonNull
@@ -322,21 +225,6 @@ public class OPFPreferences {
         return getFloat(key, null);
     }
 
-    @SuppressWarnings("ConstantConditions")
-    @Nullable
-    public Float getFloat() {
-        return getFloat(defaultPreferences, KEY_FLOAT, null);
-    }
-
-    public boolean containsFloat() {
-        return contains(defaultPreferences, KEY_FLOAT);
-    }
-
-
-    public void removeFloat() {
-        remove(defaultPreferences, KEY_FLOAT);
-    }
-
     public boolean contains(@NonNull final String key) {
         return contains(preferences, key);
     }
@@ -347,6 +235,5 @@ public class OPFPreferences {
 
     public void clear() {
         clear(preferences);
-        clear(defaultPreferences);
     }
 }
