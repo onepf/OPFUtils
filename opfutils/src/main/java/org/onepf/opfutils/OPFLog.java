@@ -26,11 +26,13 @@ import static android.util.Log.INFO;
 import static android.util.Log.VERBOSE;
 import static android.util.Log.WARN;
 
+@SuppressWarnings("PMD.ShortMethodName")
 public final class OPFLog {
 
     private static final String TAG = "OPF";
-    private static final String packageName = OPFLog.class.getPackage().getName();
-    private static boolean enabled = false;
+    private static final String PACKAGE_NAME = OPFLog.class.getPackage().getName();
+
+    private static boolean enabled;
 
     private OPFLog() {
         throw new UnsupportedOperationException();
@@ -48,7 +50,7 @@ public final class OPFLog {
     private static void log(final int level,
                             @Nullable final String message) {
         if (shouldLog(level)) {
-            Log.println(level, TAG, "" + message);
+            Log.println(level, TAG, String.valueOf(message));
         }
     }
 
@@ -60,6 +62,8 @@ public final class OPFLog {
         }
     }
 
+    //Seems like PMD bug
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static void log(final int level,
                             @NonNull final String messageFormat,
                             @Nullable final Object... args) {
@@ -78,8 +82,8 @@ public final class OPFLog {
             @NonNull final StackTraceElement[] stackTrace) {
         for (int i = 0; i < stackTrace.length - 1; i++) {
             final StackTraceElement element = stackTrace[i + 1];
-            if (stackTrace[i].getClassName().startsWith(packageName)
-                    && !element.getClassName().startsWith(packageName)) {
+            if (stackTrace[i].getClassName().startsWith(PACKAGE_NAME)
+                    && !element.getClassName().startsWith(PACKAGE_NAME)) {
                 return element;
             }
         }

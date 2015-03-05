@@ -67,7 +67,7 @@ public final class OPFUtils {
             final PackageInfo packageInfo = context.getPackageManager()
                     .getPackageInfo(context.getPackageName(), 0);
             return packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (PackageManager.NameNotFoundException ignore) {
             // ignore
         }
 
@@ -166,17 +166,25 @@ public final class OPFUtils {
         }
 
         final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Intent{");
-        stringBuilder.append("action=").append('"').append(intent.getAction()).append('"');
-        stringBuilder.append(ITEM_DIVIDER);
-        stringBuilder.append("data=").append('"').append(intent.getDataString()).append('"');
-        stringBuilder.append(ITEM_DIVIDER);
-        stringBuilder.append("component=").append('"').append(intent.getComponent()).append('"');
-        stringBuilder.append(ITEM_DIVIDER);
+        stringBuilder
+                .append("Intent{action=\"")
+                .append(intent.getAction())
+                .append('"')
+                .append(ITEM_DIVIDER)
+                .append("data=\"")
+                .append(intent.getDataString())
+                .append('"')
+                .append(ITEM_DIVIDER)
+                .append("component=\"")
+                .append(intent.getComponent())
+                .append('"')
+                .append(ITEM_DIVIDER);
 
         final Bundle extras = intent.getExtras();
-        stringBuilder.append("extras=").append(extras == null ? null : toString(extras));
-        stringBuilder.append('}');
+        stringBuilder
+                .append("extras=")
+                .append(extras == null ? null : toString(extras))
+                .append('}');
         return stringBuilder.toString();
     }
 
@@ -198,10 +206,13 @@ public final class OPFUtils {
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append('[');
         for (String key : bundle.keySet()) {
-            stringBuilder.append('"').append(key).append('"');
-            stringBuilder.append(':');
-            stringBuilder.append('"').append(bundle.get(key)).append('"');
-            stringBuilder.append(ITEM_DIVIDER);
+            stringBuilder
+                    .append('"')
+                    .append(key)
+                    .append("\":\"")
+                    .append(bundle.get(key))
+                    .append('"')
+                    .append(ITEM_DIVIDER);
         }
         stringBuilder.setLength(stringBuilder.length() - ITEM_DIVIDER.length());
         stringBuilder.append(']');
