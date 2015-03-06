@@ -24,7 +24,6 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -34,8 +33,6 @@ public final class OPFUtils {
 
     private static final String ITEM_DIVIDER = ", ";
 
-    private static final Handler HANDLER = new Handler(Looper.getMainLooper());
-
     private OPFUtils() {
         throw new UnsupportedOperationException();
     }
@@ -44,15 +41,20 @@ public final class OPFUtils {
         return Looper.getMainLooper().getThread() == Thread.currentThread();
     }
 
-    public static void post(@NonNull final Runnable runnable) {
-        HANDLER.post(runnable);
-    }
-
-    public static boolean isNetworkConnected(@NonNull final Context context) {
-        final ConnectivityManager cm = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        final NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    /**
+     * Check current connection state.
+     * <p/>
+     * Having this method return true doesn't mean internet connection is available.
+     *
+     * @param context Context object to obtain {@link android.net.ConnectivityManager} from.
+     * @return true if there's an active connection, false otherwise.
+     * @throws java.lang.SecurityException if caller doesn't have {@link android.Manifest.permission#ACCESS_NETWORK_STATE} permission.
+     */
+    public static boolean isConnected(@NonNull final Context context) {
+        final Object service = context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        final ConnectivityManager cm = (ConnectivityManager) service;
+        final NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnected();
     }
 
     /**
@@ -65,7 +67,7 @@ public final class OPFUtils {
             final PackageInfo packageInfo = context.getPackageManager()
                     .getPackageInfo(context.getPackageName(), 0);
             return packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (PackageManager.NameNotFoundException ignore) {
             // ignore
         }
 
@@ -164,17 +166,25 @@ public final class OPFUtils {
         }
 
         final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Intent{");
-        stringBuilder.append("action=").append('"').append(intent.getAction()).append('"');
-        stringBuilder.append(ITEM_DIVIDER);
-        stringBuilder.append("data=").append('"').append(intent.getDataString()).append('"');
-        stringBuilder.append(ITEM_DIVIDER);
-        stringBuilder.append("component=").append('"').append(intent.getComponent()).append('"');
-        stringBuilder.append(ITEM_DIVIDER);
+        stringBuilder
+                .append("Intent{action=\"")
+                .append(intent.getAction())
+                .append('"')
+                .append(ITEM_DIVIDER)
+                .append("data=\"")
+                .append(intent.getDataString())
+                .append('"')
+                .append(ITEM_DIVIDER)
+                .append("component=\"")
+                .append(intent.getComponent())
+                .append('"')
+                .append(ITEM_DIVIDER);
 
         final Bundle extras = intent.getExtras();
-        stringBuilder.append("extras=").append(extras == null ? null : toString(extras));
-        stringBuilder.append('}');
+        stringBuilder
+                .append("extras=")
+                .append(extras == null ? null : toString(extras))
+                .append('}');
         return stringBuilder.toString();
     }
 
@@ -196,10 +206,13 @@ public final class OPFUtils {
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append('[');
         for (String key : bundle.keySet()) {
-            stringBuilder.append('"').append(key).append('"');
-            stringBuilder.append(':');
-            stringBuilder.append('"').append(bundle.get(key)).append('"');
-            stringBuilder.append(ITEM_DIVIDER);
+            stringBuilder
+                    .append('"')
+                    .append(key)
+                    .append("\":\"")
+                    .append(bundle.get(key))
+                    .append('"')
+                    .append(ITEM_DIVIDER);
         }
         stringBuilder.setLength(stringBuilder.length() - ITEM_DIVIDER.length());
         stringBuilder.append(']');
