@@ -180,6 +180,8 @@ public class OPFUtilsTest extends Assert {
 
         assertTrue(OPFUtils.isInstalled(ctx, ctx.getPackageName()));
 
+        // Test is currently not working because PackageManager.setInstallerPackageName() does nothing
+
         final String androidInstaller = "com.android.vending";
         ctx.getPackageManager().setInstallerPackageName(ctx.getPackageName(), androidInstaller);
         assertTrue(OPFUtils.isPackageInstaller(ctx, androidInstaller));
