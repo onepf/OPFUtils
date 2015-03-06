@@ -21,10 +21,12 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
+import android.os.Build;
 
 import junit.framework.Assert;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -45,17 +47,17 @@ import static org.robolectric.Shadows.shadowOf;
  * Created by antonpp on 03.03.15.
  */
 
-@Config(emulateSdk = 18, manifest = Config.NONE)
+@Config(emulateSdk = Build.VERSION_CODES.JELLY_BEAN_MR2, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
 public class OPFUtilsTest extends Assert {
-    
+
     private static final int NUM_TESTS = 100;
     private static final int NUM_PERMISSIONS = 100;
     private static final int MAX_PERMISSIONS = 20;
     private static final String TEST_PACKAGE_NAME = "org.onepf.opfutils.test.package";
-    
+
     private static final Random RND = new Random();
-    
+
     private Context ctx;
     private RobolectricPackageManager packageManager;
     private ShadowApplication shadowApplication;
@@ -66,23 +68,23 @@ public class OPFUtilsTest extends Assert {
         packageManager = (RobolectricPackageManager) RuntimeEnvironment.application.getPackageManager();
         shadowApplication = shadowOf(RuntimeEnvironment.application);
     }
-    
+
     @Test
-    public void testIsNetworkConnected() {
+    public void testIsConnected() {
         final ConnectivityManager connectivityManager = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
         final ShadowNetworkInfo shadowNetworkInfo = shadowOf(connectivityManager.getActiveNetworkInfo());
 
         shadowNetworkInfo.setConnectionStatus(true);
-        assertTrue(OPFUtils.isNetworkConnected(ctx));
+        assertTrue(OPFUtils.isConnected(ctx));
 
         shadowNetworkInfo.setConnectionStatus(false);
-        assertFalse(OPFUtils.isNetworkConnected(ctx));
+        assertFalse(OPFUtils.isConnected(ctx));
     }
-    
+
     @Test
     public void testGetAppVersion() throws PackageManager.NameNotFoundException {
         PackageInfo packageInfo;
-        for (int i = 0 ; i < NUM_TESTS; ++i) {
+        for (int i = 0; i < NUM_TESTS; ++i) {
             packageInfo = createTestPackageInfo(i);
             packageManager.addPackage(packageInfo);
             shadowApplication.setPackageName(packageInfo.packageName);
@@ -93,20 +95,20 @@ public class OPFUtilsTest extends Assert {
         shadowApplication.setPackageName(packageInfo.packageName);
         assertEquals(Integer.MIN_VALUE, OPFUtils.getAppVersion(ctx));
     }
-    
+
     private PackageInfo createTestPackageInfo(int packagePrefix) {
         PackageInfo packageInfo = new PackageInfo();
         packageInfo.versionCode = RND.nextInt();
         packageInfo.packageName = String.format(TEST_PACKAGE_NAME + "%d", packagePrefix);
         packageInfo.applicationInfo = new ApplicationInfo();
-        packageInfo.applicationInfo.packageName = TEST_PACKAGE_NAME;
+        packageInfo.applicationInfo.packageName = packageInfo.packageName;
         return packageInfo;
     }
-    
+
     @Test
     public void testIsSystemApp() {
         int testNum = 1;
-        
+
         PackageInfo packageInfo = createTestPackageInfo(testNum++);
         packageInfo.applicationInfo.flags = 0;
         packageManager.addPackage(packageInfo);
@@ -122,11 +124,11 @@ public class OPFUtilsTest extends Assert {
         packageManager.addPackage(packageInfo);
         assertTrue(OPFUtils.isSystemApp(ctx, packageInfo.packageName));
     }
-    
+
     @Test
     public void testIsInstalled() {
         int testNum = 1;
-        
+
         PackageInfo packageInfo = createTestPackageInfo(testNum++);
         packageManager.addPackage(packageInfo);
         assertTrue(OPFUtils.isInstalled(ctx, packageInfo.packageName));
@@ -140,12 +142,12 @@ public class OPFUtilsTest extends Assert {
         packageInfo = createTestPackageInfo(testNum++);
         assertFalse(OPFUtils.isInstalled(ctx, packageInfo.packageName));
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void testHasRequestedPermissionException() {
         OPFUtils.hasRequestedPermission(ctx, "");
     }
-    
+
     @Test
     public void testHasRequestedPermission() {
         final String[] permissions = new String[NUM_PERMISSIONS];
@@ -169,29 +171,32 @@ public class OPFUtilsTest extends Assert {
             }
         }
     }
-    
+
+    @Ignore
     @Test
     public void testIsPackageInstaller() {
-        final PackageInfo fakeInstallerpackageInfo = createTestPackageInfo(NUM_TESTS);
-        packageManager.addPackage(fakeInstallerpackageInfo);
+        final PackageInfo fakeInstallerPackageInfo = createTestPackageInfo(NUM_TESTS);
+        packageManager.addPackage(fakeInstallerPackageInfo);
 
-        //packageManager.setInstallerPackageName(ctx.getPackageName(), "abc");
-        //System.out.println(packageManager.getInstallerPackageName(ctx.getPackageName()));
-        
+        assertTrue(OPFUtils.isInstalled(ctx, ctx.getPackageName()));
+
+        final String androidInstaller = "com.android.vending";
+        ctx.getPackageManager().setInstallerPackageName(ctx.getPackageName(), androidInstaller);
+        assertTrue(OPFUtils.isPackageInstaller(ctx, androidInstaller));
+
         PackageInfo packageInfo;
         boolean isPackageInstaller;
-        for (int i = 0 ; i < NUM_TESTS; ++i) {
+        for (int i = 0; i < NUM_TESTS; ++i) {
             packageInfo = createTestPackageInfo(i);
             packageManager.addPackage(packageInfo);
             isPackageInstaller = RND.nextBoolean();
             if (isPackageInstaller) {
-       //         packageManager.setInstallerPackageName(ctx.getPackageName(), packageInfo.packageName);
+                ctx.getPackageManager().setInstallerPackageName(ctx.getPackageName(), packageInfo.packageName);
+                // packageManager.setInstallerPackageName(ctx.getPackageName(), packageInfo.packageName);
             } else {
-         //       packageManager.setInstallerPackageName(ctx.getPackageName(), fakeInstallerpackageInfo.packageName);
+                ctx.getPackageManager().setInstallerPackageName(ctx.getPackageName(), fakeInstallerPackageInfo.packageName);
+                // packageManager.setInstallerPackageName(ctx.getPackageName(), fakeInstallerpackageInfo.packageName);
             }
-           // System.out.println(packageManager.getInstallerPackageName(ctx.getPackageName()));
-            System.out.println(ctx.getPackageManager().getInstallerPackageName(ctx.getPackageName()));
-            System.out.println(packageInfo.packageName);
             assertEquals(isPackageInstaller, OPFUtils.isPackageInstaller(ctx, packageInfo.packageName));
         }
     }
