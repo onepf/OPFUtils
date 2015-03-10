@@ -49,11 +49,11 @@ public class OPFPreferencesTest extends Assert {
     private static final String KEY_5 = "KEY_5";
     private static final String[] KEYS = {KEY_1, KEY_2, KEY_3, KEY_4, KEY_5};
 
-    private static final String testString = "notEmpty";
-    private static final int testInt = 0xDEADBEAF;
-    private static final boolean testBoolean = false;
-    private static final float testFloat = 3.14159265f;
-    private static final long testLong = 1000000007L;
+    private static final String TEST_STRING = "notEmpty";
+    private static final int TEST_INT = 0xDEADBEAF;
+    private static final boolean TEST_BOOLEAN = false;
+    private static final float TEST_FLOAT = 3.14159265f;
+    private static final long TEST_LONG = 1000000007L;
 
     private static final String POSTFIX = "test";
     private static final int MODE = Context.MODE_MULTI_PROCESS;
@@ -96,7 +96,7 @@ public class OPFPreferencesTest extends Assert {
     }
 
     @Test
-    public void testGetPrefernces() {
+    public void testGetPreferences() {
         assertThat(opfPreferences.getPreferences(), is(sharedPreferences));
     }
 
@@ -112,7 +112,7 @@ public class OPFPreferencesTest extends Assert {
     }
 
     @Test
-    public void testPutPrimitivie() {
+    public void testPutPrimitive() {
         for (int i = 0; i < NUM_TESTS; ++i) {
             final int randInt = RND.nextInt();
             final boolean randBoolean = RND.nextBoolean();
@@ -240,7 +240,7 @@ public class OPFPreferencesTest extends Assert {
             assertEquals((Integer) randInt, opfPreferences.getInt(KEY_1));
             assertEquals((Boolean) randBoolean, opfPreferences.getBoolean(KEY_2));
             assertEquals(randFloat, opfPreferences.getFloat(KEY_3));
-            assertEquals((Long) randLong,opfPreferences.getLong(KEY_4));
+            assertEquals((Long) randLong, opfPreferences.getLong(KEY_4));
         }
 
         // check that preferences returns null if it doesn't contain specified key
@@ -256,11 +256,11 @@ public class OPFPreferencesTest extends Assert {
         for (String key : KEYS) {
             assertFalse(opfPreferences.contains(key));
         }
-        opfPreferences.put(KEY_1, testString);
-        opfPreferences.put(KEY_2, testInt);
-        opfPreferences.put(KEY_3, testBoolean);
-        opfPreferences.put(KEY_4, testFloat);
-        opfPreferences.put(KEY_5, testLong);
+        opfPreferences.put(KEY_1, TEST_STRING);
+        opfPreferences.put(KEY_2, TEST_INT);
+        opfPreferences.put(KEY_3, TEST_BOOLEAN);
+        opfPreferences.put(KEY_4, TEST_FLOAT);
+        opfPreferences.put(KEY_5, TEST_LONG);
         for (String key : KEYS) {
             assertTrue(opfPreferences.contains(key));
         }
@@ -273,11 +273,11 @@ public class OPFPreferencesTest extends Assert {
             opfPreferences.remove(key);
             assertFalse(opfPreferences.contains(key));
         }
-        opfPreferences.put(KEY_1, testString);
-        opfPreferences.put(KEY_2, testInt);
-        opfPreferences.put(KEY_3, testBoolean);
-        opfPreferences.put(KEY_4, testFloat);
-        opfPreferences.put(KEY_5, testLong);
+        opfPreferences.put(KEY_1, TEST_STRING);
+        opfPreferences.put(KEY_2, TEST_INT);
+        opfPreferences.put(KEY_3, TEST_BOOLEAN);
+        opfPreferences.put(KEY_4, TEST_FLOAT);
+        opfPreferences.put(KEY_5, TEST_LONG);
         for (String key : KEYS) {
             assertTrue(opfPreferences.contains(key));
             opfPreferences.remove(key);
@@ -287,11 +287,11 @@ public class OPFPreferencesTest extends Assert {
 
     @Test
     public void testClear() {
-        opfPreferences.put(KEY_1, testString);
-        opfPreferences.put(KEY_2, testInt);
-        opfPreferences.put(KEY_3, testBoolean);
-        opfPreferences.put(KEY_4, testFloat);
-        opfPreferences.put(KEY_5, testLong);
+        opfPreferences.put(KEY_1, TEST_STRING);
+        opfPreferences.put(KEY_2, TEST_INT);
+        opfPreferences.put(KEY_3, TEST_BOOLEAN);
+        opfPreferences.put(KEY_4, TEST_FLOAT);
+        opfPreferences.put(KEY_5, TEST_LONG);
         for (String key : KEYS) {
             assertTrue(opfPreferences.contains(key));
         }

@@ -35,7 +35,7 @@ import org.robolectric.annotation.Config;
 public class OPFChecksTest {
 
     @Test
-    public void testCheckThreadNoExceptions() {
+    public void testCheckThreadNoExceptions() throws InterruptedException {
         ExceptionCheck exceptionCheck = new ExceptionCheck();
         OPFChecks.checkThread(true);
         Thread thread = new Thread(new Runnable() {
@@ -46,12 +46,8 @@ public class OPFChecksTest {
         });
         thread.setUncaughtExceptionHandler(exceptionCheck);
         thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Assert.assertFalse(exceptionCheck.receivedWrongThreadException);
+        thread.join();
+        Assert.assertFalse(exceptionCheck.isReceivedWrongThreadException());
     }
 
     @Test(expected = WrongThreadException.class)
@@ -60,7 +56,7 @@ public class OPFChecksTest {
     }
 
     @Test
-    public void testCheckThreadExpectedMainThreadException() {
+    public void testCheckThreadExpectedMainThreadException() throws InterruptedException {
         ExceptionCheck exceptionCheck = new ExceptionCheck();
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -70,19 +66,21 @@ public class OPFChecksTest {
         });
         thread.setUncaughtExceptionHandler(exceptionCheck);
         thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Assert.assertTrue(exceptionCheck.receivedWrongThreadException);
+        thread.join();
+        Assert.assertTrue(exceptionCheck.isReceivedWrongThreadException());
     }
 
     private static final class ExceptionCheck implements Thread.UncaughtExceptionHandler {
-        public boolean receivedWrongThreadException = false;
+
+        private boolean isReceivedWrongThreadException;
+
+        public boolean isReceivedWrongThreadException() {
+            return isReceivedWrongThreadException;
+        }
+
         @Override
         public void uncaughtException(Thread thread, Throwable throwable) {
-            receivedWrongThreadException = (throwable instanceof WrongThreadException);
+            isReceivedWrongThreadException = throwable instanceof WrongThreadException;
         }
     }
 }
