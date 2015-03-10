@@ -16,6 +16,7 @@
 
 package org.onepf.opfutils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -35,7 +36,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 /**
- * Created by antonpp on 10.03.15.
+ * @author antonpp
+ * @since 10.03.2015
  */
 @Config(emulateSdk = Build.VERSION_CODES.JELLY_BEAN_MR2, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
@@ -73,10 +75,6 @@ public class OPFPreferencesTest extends Assert {
         sharedPreferences = ctx.getSharedPreferences(ctx.getPackageName() + "." + POSTFIX, Context.MODE_MULTI_PROCESS);
         opfPreferences = new OPFPreferences(ctx, POSTFIX, MODE);
 
-    }
-
-    private SharedPreferences getPreferences(String name, int mode) {
-        return ctx.getSharedPreferences(name, mode);
     }
 
     private String[] getRandomStrings(int n, int len) {
@@ -158,6 +156,7 @@ public class OPFPreferencesTest extends Assert {
         assertEquals(randInt, sharedPreferences.getInt(KEY_1, randInt + 1));
     }
 
+    @SuppressLint("CommitPrefEdits")
     @Test
     public void testGetStringWithDefValue() {
         // put directly into SharedPreferences
@@ -184,7 +183,7 @@ public class OPFPreferencesTest extends Assert {
         // put directly into SharedPreferences
         String[] randomStrings = getRandomStrings(NUM_TESTS, TEST_STRING_LENGTH);
         for (int i = 0; i < NUM_TESTS; ++i) {
-            sharedPreferences.edit().putString(KEY_1, randomStrings[i]).commit();
+            sharedPreferences.edit().putString(KEY_1, randomStrings[i]).apply();
             assertEquals(randomStrings[i], opfPreferences.getString(KEY_1));
         }
 

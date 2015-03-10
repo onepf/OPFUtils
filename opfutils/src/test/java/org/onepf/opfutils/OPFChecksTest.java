@@ -27,7 +27,8 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 /**
- * Created by antonpp on 10.03.15.
+ * @author antonpp
+ * @since 10.03.2015
  */
 @Config(emulateSdk = Build.VERSION_CODES.JELLY_BEAN_MR2, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
@@ -35,6 +36,7 @@ public class OPFChecksTest {
 
     @Test
     public void testCheckThreadNoExceptions() {
+        ExceptionCheck exceptionCheck = new ExceptionCheck();
         OPFChecks.checkThread(true);
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -42,12 +44,14 @@ public class OPFChecksTest {
                 OPFChecks.checkThread(false);
             }
         });
+        thread.setUncaughtExceptionHandler(exceptionCheck);
         thread.start();
         try {
             thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        Assert.assertFalse(exceptionCheck.receivedWrongThreadException);
     }
 
     @Test(expected = WrongThreadException.class)
@@ -71,14 +75,14 @@ public class OPFChecksTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Assert.assertTrue(exceptionCheck.receivedCorrectException);
+        Assert.assertTrue(exceptionCheck.receivedWrongThreadException);
     }
 
     private static final class ExceptionCheck implements Thread.UncaughtExceptionHandler {
-        public boolean receivedCorrectException = false;
+        public boolean receivedWrongThreadException = false;
         @Override
         public void uncaughtException(Thread thread, Throwable throwable) {
-            receivedCorrectException = (throwable instanceof WrongThreadException);
+            receivedWrongThreadException = (throwable instanceof WrongThreadException);
         }
     }
 }

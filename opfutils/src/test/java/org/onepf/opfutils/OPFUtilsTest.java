@@ -44,9 +44,9 @@ import java.util.Random;
 import static org.robolectric.Shadows.shadowOf;
 
 /**
- * Created by antonpp on 03.03.15.
+ * @author antonpp
+ * @since 10.03.2015
  */
-
 @Config(emulateSdk = Build.VERSION_CODES.JELLY_BEAN_MR2, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
 public class OPFUtilsTest extends Assert {
@@ -119,7 +119,7 @@ public class OPFUtilsTest extends Assert {
         packageManager.addPackage(packageInfo);
         assertTrue(OPFUtils.isSystemApp(ctx, packageInfo.packageName));
 
-        packageInfo = createTestPackageInfo(testNum++);
+        packageInfo = createTestPackageInfo(testNum);
         packageInfo.applicationInfo.flags = ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
         packageManager.addPackage(packageInfo);
         assertTrue(OPFUtils.isSystemApp(ctx, packageInfo.packageName));
@@ -139,7 +139,7 @@ public class OPFUtilsTest extends Assert {
         packageManager.removePackage(packageInfo.packageName);
         assertFalse(OPFUtils.isInstalled(ctx, packageInfo.packageName));
 
-        packageInfo = createTestPackageInfo(testNum++);
+        packageInfo = createTestPackageInfo(testNum);
         assertFalse(OPFUtils.isInstalled(ctx, packageInfo.packageName));
     }
 
