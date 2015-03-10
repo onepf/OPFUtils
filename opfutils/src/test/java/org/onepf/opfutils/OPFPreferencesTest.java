@@ -16,7 +16,6 @@
 
 package org.onepf.opfutils;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -156,13 +155,12 @@ public class OPFPreferencesTest extends Assert {
         assertEquals(randInt, sharedPreferences.getInt(KEY_1, randInt + 1));
     }
 
-    @SuppressLint("CommitPrefEdits")
     @Test
     public void testGetStringWithDefValue() {
         // put directly into SharedPreferences
         String[] randomStrings = getRandomStrings(NUM_TESTS, TEST_STRING_LENGTH);
         for (int i = 0; i < NUM_TESTS; ++i) {
-            sharedPreferences.edit().putString(KEY_1, randomStrings[i]).commit();
+            sharedPreferences.edit().putString(KEY_1, randomStrings[i]).apply();
             assertEquals(randomStrings[i], opfPreferences.getString(KEY_1, randomStrings[i] + "aString"));
         }
 
