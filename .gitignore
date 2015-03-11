@@ -1,3 +1,6 @@
+# Mac files
+.DS_Store
+
 ### Android template
 # Built application files
 *.apk
@@ -47,6 +50,10 @@ proguard/
 ## File-based project format
 *.ipr
 *.iws
+
+# Gradle:
+.idea/gradle.xml
+.idea/libraries
 
 ## Additional for IntelliJ
 out/
