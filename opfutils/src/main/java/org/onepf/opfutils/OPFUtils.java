@@ -112,35 +112,6 @@ public final class OPFUtils {
     }
 
     /**
-     * Checks if the AndroidManifest contains a permission.
-     *
-     * @param permission The permission to test.
-     * @return true if the permission is requested by the application.
-     */
-    public static boolean hasRequestedPermission(@NonNull final Context context,
-                                                 @NonNull final String permission) {
-        if (TextUtils.isEmpty(permission)) {
-            throw new IllegalArgumentException("Permission can't be null or empty.");
-        }
-
-        try {
-            final PackageInfo info = context.getPackageManager()
-                    .getPackageInfo(context.getPackageName(), PackageManager.GET_PERMISSIONS);
-            final String[] requestedPermissions = info.requestedPermissions;
-            if (requestedPermissions != null) {
-                for (String requestedPermission : requestedPermissions) {
-                    if (TextUtils.equals(permission, requestedPermission)) {
-                        return true;
-                    }
-                }
-            }
-        } catch (PackageManager.NameNotFoundException ignore) {
-            // ignore
-        }
-        return false;
-    }
-
-    /**
      * Checks if an application with the passed name is the installer of the calling app.
      *
      * @param packageName The package name of the tested application.
