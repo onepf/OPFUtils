@@ -16,6 +16,7 @@
 
 package org.onepf.opfutils;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -28,6 +29,10 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
+import java.util.List;
+
+import static android.app.ActivityManager.RunningAppProcessInfo;
 
 public final class OPFUtils {
 
@@ -123,6 +128,23 @@ public final class OPFUtils {
         final String appPackageName = context.getPackageName();
         final String installerPackageName = packageManager.getInstallerPackageName(appPackageName);
         return TextUtils.equals(installerPackageName, packageName);
+    }
+
+    public static boolean isMainProcess(@NonNull final Context context) {
+        final int currentPid = android.os.Process.myPid();
+        final ActivityManager activityManager = (ActivityManager) context
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        final List<RunningAppProcessInfo> runningProcesses = activityManager.getRunningAppProcesses();
+
+        String currentProcessName = null;
+        for (RunningAppProcessInfo process : runningProcesses) {
+            if (process.pid == currentPid) {
+                currentProcessName = process.processName;
+                break;
+            }
+        }
+
+        return context.getPackageName().equals(currentProcessName);
     }
 
     /**

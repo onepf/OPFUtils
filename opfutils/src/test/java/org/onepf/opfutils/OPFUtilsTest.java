@@ -36,9 +36,6 @@ import org.robolectric.res.builder.RobolectricPackageManager;
 import org.robolectric.shadows.ShadowApplication;
 import org.robolectric.shadows.ShadowNetworkInfo;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 import static org.robolectric.Shadows.shadowOf;
@@ -52,8 +49,6 @@ import static org.robolectric.Shadows.shadowOf;
 public class OPFUtilsTest extends Assert {
 
     private static final int NUM_TESTS = 100;
-    private static final int NUM_PERMISSIONS = 100;
-    private static final int MAX_PERMISSIONS = 20;
     private static final String TEST_PACKAGE_NAME = "org.onepf.opfutils.test.package";
 
     private static final Random RND = new Random();
@@ -141,35 +136,6 @@ public class OPFUtilsTest extends Assert {
 
         packageInfo = createTestPackageInfo(testNum);
         assertFalse(OPFUtils.isInstalled(ctx, packageInfo.packageName));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testHasRequestedPermissionException() {
-        OPFUtils.hasRequestedPermission(ctx, "");
-    }
-
-    @Test
-    public void testHasRequestedPermission() {
-        final String[] permissions = new String[NUM_PERMISSIONS];
-        List<String> listPermissions = Arrays.asList(permissions);
-        List<String> sublist;
-        for (int i = 0; i < NUM_PERMISSIONS; ++i) {
-            permissions[i] = String.format("PERMISSION_%d", i);
-        }
-
-        PackageInfo packageInfo;
-        for (int i = 0; i < NUM_TESTS; ++i) {
-            int numPerm = RND.nextInt(MAX_PERMISSIONS);
-            Collections.shuffle(listPermissions);
-            sublist = listPermissions.subList(0, numPerm);
-            packageInfo = createTestPackageInfo(i);
-            packageInfo.requestedPermissions = sublist.toArray(new String[numPerm]);
-            packageManager.addPackage(packageInfo);
-            shadowApplication.setPackageName(packageInfo.packageName);
-            for (String permission : permissions) {
-                assertEquals(sublist.contains(permission), OPFUtils.hasRequestedPermission(ctx, permission));
-            }
-        }
     }
 
     @Ignore
