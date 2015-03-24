@@ -32,6 +32,7 @@ public final class OPFLog {
     private static final String TAG = "OPF";
     private static final String PACKAGE_NAME = OPFLog.class.getPackage().getName();
 
+    private static boolean isDebug;
     private static boolean enabled;
 
     private OPFLog() {
@@ -40,9 +41,9 @@ public final class OPFLog {
 
 
     private static boolean shouldLog(final int level) {
-        return enabled
-                // Always log errors
-                || level >= ERROR
+        return isDebug && level <= DEBUG && enabled
+                // Don't log debug messages in release build
+                || level > DEBUG && enabled
                 // Log if logging is enabled or allowed for current tag
                 || Log.isLoggable(TAG, level);
     }
@@ -69,12 +70,6 @@ public final class OPFLog {
                             @Nullable final Object... args) {
         if (shouldLog(level)) {
             Log.println(level, TAG, String.format(messageFormat, args));
-        }
-    }
-
-    private static void logMethod(final int level, @Nullable final Object... args) {
-        if (shouldLog(level)) {
-            Log.println(level, TAG, getMethodLog(args));
         }
     }
 
@@ -121,7 +116,8 @@ public final class OPFLog {
         return enabled;
     }
 
-    public static void setEnabled(final boolean enabled) {
+    public static void setEnabled(final boolean isDebug, final boolean enabled) {
+        OPFLog.isDebug = isDebug;
         OPFLog.enabled = enabled;
     }
 
@@ -185,23 +181,9 @@ public final class OPFLog {
         log(ERROR, message, args);
     }
 
-    public static void methodV(@Nullable final Object... args) {
-        logMethod(VERBOSE, args);
-    }
-
-    public static void methodD(@Nullable final Object... args) {
-        logMethod(DEBUG, args);
-    }
-
-    public static void methodI(@Nullable final Object... args) {
-        logMethod(INFO, args);
-    }
-
-    public static void methodW(@Nullable final Object... args) {
-        logMethod(WARN, args);
-    }
-
-    public static void methodE(@Nullable final Object... args) {
-        logMethod(ERROR, args);
+    public static void logMethod(@Nullable final Object... args) {
+        if (shouldLog(DEBUG)) {
+            Log.println(DEBUG, TAG, getMethodLog(args));
+        }
     }
 }
