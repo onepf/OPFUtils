@@ -26,6 +26,11 @@ import static android.util.Log.INFO;
 import static android.util.Log.VERBOSE;
 import static android.util.Log.WARN;
 
+/**
+ * Is used for logging the OPF libraries.
+ * Doesn't log anything, if is no enabled. Turns off debug logs in a release build.
+ * Uses "OPF" log tag.
+ */
 @SuppressWarnings("PMD.ShortMethodName")
 public final class OPFLog {
 
@@ -38,7 +43,6 @@ public final class OPFLog {
     private OPFLog() {
         throw new UnsupportedOperationException();
     }
-
 
     private static boolean shouldLog(final int level) {
         return isDebug && level <= DEBUG && enabled
@@ -112,10 +116,21 @@ public final class OPFLog {
         return stringBuilder.toString();
     }
 
+    /**
+     * Returns {@code true} if the logs are enabled, false otherwise.
+     *
+     * @return {@code true} if the logs are enabled, false otherwise.
+     */
     public static boolean isEnabled() {
         return enabled;
     }
 
+    /**
+     * Sets if the logs enabled and if the build debug.
+     *
+     * @param isDebug Set {@code BuildConfig.DEBUG} value of your application.
+     * @param enabled {@code true} if logs should be enabled.
+     */
     public static void setEnabled(final boolean isDebug, final boolean enabled) {
         OPFLog.isDebug = isDebug;
         OPFLog.enabled = enabled;
@@ -181,6 +196,11 @@ public final class OPFLog {
         log(ERROR, message, args);
     }
 
+    /**
+     * Logs a class and a method names.
+     *
+     * @param args The arguments of the logged method.
+     */
     public static void logMethod(@Nullable final Object... args) {
         if (shouldLog(DEBUG)) {
             Log.println(DEBUG, TAG, getMethodLog(args));

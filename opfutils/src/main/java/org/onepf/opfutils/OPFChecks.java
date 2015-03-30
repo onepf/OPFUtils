@@ -31,12 +31,22 @@ import org.onepf.opfutils.exception.WrongThreadException;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Provides methods for common checks. All methods throw runtime exceptions if a check failed.
+ */
 public final class OPFChecks {
 
     private OPFChecks() {
         throw new IllegalStateException();
     }
 
+    /**
+     * Checks is the current thread main or not. Throws {@link org.onepf.opfutils.exception.WrongThreadException}
+     * if the check failed.
+     *
+     * @param mainThreadExpected Indicates is the main thread expected. Throws an exception if current
+     *                           and expected threads are different.
+     */
     public static void checkThread(final boolean mainThreadExpected) {
         final boolean isMainThread = OPFUtils.isMainThread();
         if (mainThreadExpected != isMainThread) {
@@ -44,6 +54,12 @@ public final class OPFChecks {
         }
     }
 
+    /**
+     * Checks is a service has been described in the AndroidManifest.xml file.
+     *
+     * @param context The instance of {@link android.content.Context}.
+     * @param service The checked service.
+     */
     @SuppressWarnings("PMD.PreserveStackTrace")
     public static void checkService(@NonNull final Context context,
                                     @NonNull final ComponentName service) {
@@ -56,6 +72,10 @@ public final class OPFChecks {
         }
     }
 
+    /**
+     * The same as {@link #checkPermission(android.content.Context, String, java.lang.String)} with the default
+     * exception message.
+     */
     public static void checkPermission(@NonNull final Context context,
                                        @NonNull final String permission) {
         checkPermission(
@@ -69,6 +89,13 @@ public final class OPFChecks {
         );
     }
 
+    /**
+     * Checks is a permission has been described in the AndroidManifest.xml file.
+     *
+     * @param context          The instance of {@link android.content.Context}.
+     * @param permission       The checked permission.
+     * @param exceptionMessage The exception message.
+     */
     public static void checkPermission(@NonNull final Context context,
                                        @NonNull final String permission,
                                        @NonNull final String exceptionMessage) {
@@ -93,23 +120,52 @@ public final class OPFChecks {
         throw new SecurityException(exceptionMessage);
     }
 
+    /**
+     * The same as {@link #checkReceiver(android.content.Context, String, android.content.Intent, String)}
+     * with the {@code null} values for the {@code receiverName} and {@code permission} parameters.
+     */
     public static void checkReceiver(@NonNull final Context context,
                                      @NonNull final Intent broadcastIntent) {
         checkReceiver(context, null, broadcastIntent, null);
     }
 
+    /**
+     * The same as {@link #checkReceiver(android.content.Context, String, android.content.Intent, String)}
+     * with the {@code null} value for the {@code permission} parameter.
+     */
     public static void checkReceiver(@NonNull final Context context,
                                      @NonNull final String receiverName,
                                      @NonNull final Intent broadcastIntent) {
         checkReceiver(context, receiverName, broadcastIntent, null);
     }
 
+    /**
+     * The same as {@link #checkReceiver(android.content.Context, String, android.content.Intent, String)}
+     * with the {@code null} value for the {@code receiverName} parameter.
+     */
     public static void checkReceiver(@NonNull final Context context,
                                      @NonNull final Intent broadcastIntent,
                                      @NonNull final String permission) {
         checkReceiver(context, null, broadcastIntent, permission);
     }
 
+    /**
+     * Checks is a receiver has been described in the AndroidManifest.xml file.
+     * <p/>
+     * Uses the following steps for the check:
+     * <ol>
+     * <li>Checks are there receivers that can handle the {@code broadcastIntent}.</li>
+     * <li>Checks is there receiver with the package name corresponding to the app package name.</li>
+     * <li>If the {@code receiverName} is no {@code null},
+     * checks is there receiver belong the founded receivers with the required name.</li>
+     * <li>If the {code permission} is no {@code null}, checks does the founded receiver have this permission.</li>
+     * </ol>
+     *
+     * @param context         The instance of {@link android.content.Context}.
+     * @param receiverName    The name of the checked receiver.
+     * @param broadcastIntent The intent which must be handled by the checked receiver.
+     * @param permission      The permission that must be defined for the checked receiver.
+     */
     public static void checkReceiver(@NonNull final Context context,
                                      @Nullable final String receiverName,
                                      @NonNull final Intent broadcastIntent,

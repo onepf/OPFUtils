@@ -22,6 +22,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+/**
+ * The helper class for the easier work with the {@link android.content.SharedPreferences}.
+ */
 public class OPFPreferences {
 
     private static void put(@NonNull final SharedPreferences preferences,

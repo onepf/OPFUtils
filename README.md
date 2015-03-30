@@ -1,7 +1,7 @@
 OPFUtils
 ========
 
-Common utils used among OPF libraries.
+Common utils used among OPF libraries. Intended for the internal use.
 
 * Add snapshot repository
 ```groovy
@@ -13,7 +13,12 @@ allprojects {
 }
 ```
 
-* Add dependency
+* Add the release dependency:
 ```groovy
-compile 'org.onepf:opfutils:0.1.11'
+compile 'org.onepf:opfutils:0.1.15'
+```
+
+or the latest snapshot dependency:
+```groovy
+compile 'org.onepf:opfutils:0.1.20-SNAPSHOT'
 ```
