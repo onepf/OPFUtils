@@ -19,10 +19,12 @@ package org.onepf.opfutils;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import org.onepf.opfutils.exception.WrongThreadException;
 
@@ -70,7 +72,25 @@ public final class OPFChecks {
     public static void checkPermission(@NonNull final Context context,
                                        @NonNull final String permission,
                                        @NonNull final String exceptionMessage) {
-        context.enforceCallingOrSelfPermission(permission, exceptionMessage);
+        if (TextUtils.isEmpty(permission)) {
+            throw new IllegalArgumentException("Permission can't be null or empty.");
+        }
+
+        try {
+            final PackageInfo info = context.getPackageManager()
+                    .getPackageInfo(context.getPackageName(), PackageManager.GET_PERMISSIONS);
+            final String[] requestedPermissions = info.requestedPermissions;
+            if (requestedPermissions != null) {
+                for (String requestedPermission : requestedPermissions) {
+                    if (TextUtils.equals(permission, requestedPermission)) {
+                        return;
+                    }
+                }
+            }
+        } catch (PackageManager.NameNotFoundException ignore) {
+            // ignore
+        }
+        throw new SecurityException(exceptionMessage);
     }
 
     public static void checkReceiver(@NonNull final Context context,
