@@ -30,7 +30,7 @@ import org.robolectric.annotation.Config;
  * @author antonpp
  * @since 10.03.2015
  */
-@Config(emulateSdk = Build.VERSION_CODES.JELLY_BEAN_MR2, manifest = Config.NONE)
+@Config(emulateSdk = Build.VERSION_CODES.LOLLIPOP, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
 public class OPFChecksTest {
 

@@ -26,7 +26,6 @@ import android.os.Build;
 import junit.framework.Assert;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -44,7 +43,7 @@ import static org.robolectric.Shadows.shadowOf;
  * @author antonpp
  * @since 10.03.2015
  */
-@Config(emulateSdk = Build.VERSION_CODES.JELLY_BEAN_MR2, manifest = Config.NONE)
+@Config(emulateSdk = Build.VERSION_CODES.LOLLIPOP, manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
 public class OPFUtilsTest extends Assert {
 
@@ -136,36 +135,5 @@ public class OPFUtilsTest extends Assert {
 
         packageInfo = createTestPackageInfo(testNum);
         assertFalse(OPFUtils.isInstalled(ctx, packageInfo.packageName));
-    }
-
-    @Ignore
-    @Test
-    public void testIsPackageInstaller() {
-        final PackageInfo fakeInstallerPackageInfo = createTestPackageInfo(NUM_TESTS);
-        packageManager.addPackage(fakeInstallerPackageInfo);
-
-        assertTrue(OPFUtils.isInstalled(ctx, ctx.getPackageName()));
-
-        // Test is currently not working because PackageManager.setInstallerPackageName() does nothing
-
-        final String androidInstaller = "com.android.vending";
-        ctx.getPackageManager().setInstallerPackageName(ctx.getPackageName(), androidInstaller);
-        assertTrue(OPFUtils.isPackageInstaller(ctx, androidInstaller));
-
-        PackageInfo packageInfo;
-        boolean isPackageInstaller;
-        for (int i = 0; i < NUM_TESTS; ++i) {
-            packageInfo = createTestPackageInfo(i);
-            packageManager.addPackage(packageInfo);
-            isPackageInstaller = RND.nextBoolean();
-            if (isPackageInstaller) {
-                ctx.getPackageManager().setInstallerPackageName(ctx.getPackageName(), packageInfo.packageName);
-                // packageManager.setInstallerPackageName(ctx.getPackageName(), packageInfo.packageName);
-            } else {
-                ctx.getPackageManager().setInstallerPackageName(ctx.getPackageName(), fakeInstallerPackageInfo.packageName);
-                // packageManager.setInstallerPackageName(ctx.getPackageName(), fakeInstallerpackageInfo.packageName);
-            }
-            assertEquals(isPackageInstaller, OPFUtils.isPackageInstaller(ctx, packageInfo.packageName));
-        }
     }
 }
