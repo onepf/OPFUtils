@@ -28,7 +28,6 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
 import java.util.List;
 
@@ -116,18 +115,10 @@ public final class OPFUtils {
         return false;
     }
 
-    /**
-     * Checks if an application with the passed name is the installer of the calling app.
-     *
-     * @param packageName The package name of the tested application.
-     * @return true if the application with the passed package is the installer.
-     */
-    public static boolean isPackageInstaller(@NonNull final Context context,
-                                             @Nullable final String packageName) {
+    @Nullable
+    public static String getPackageInstaller(@NonNull final Context context) {
         final PackageManager packageManager = context.getPackageManager();
-        final String appPackageName = context.getPackageName();
-        final String installerPackageName = packageManager.getInstallerPackageName(appPackageName);
-        return TextUtils.equals(installerPackageName, packageName);
+        return packageManager.getInstallerPackageName(context.getPackageName());
     }
 
     public static boolean isMainProcess(@NonNull final Context context) {
