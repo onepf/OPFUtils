@@ -117,9 +117,9 @@ public final class OPFLog {
     }
 
     /**
-     * Returns {@code true} if the logs are enabled, false otherwise.
+     * Returns {@code true} if the logs are enabled, {@code false} otherwise.
      *
-     * @return {@code true} if the logs are enabled, false otherwise.
+     * @return {@code true} if the logs are enabled, {@code false} otherwise.
      */
     public static boolean isEnabled() {
         return enabled;

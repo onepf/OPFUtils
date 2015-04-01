@@ -17,7 +17,7 @@
 package org.onepf.opfutils.exception;
 
 /**
- * Throws when current thread is not as expected.
+ * Throws when the current thread is not as expected.
  */
 public class WrongThreadException extends IllegalStateException {
 

@@ -52,7 +52,7 @@ public final class OPFUtils {
      * Returns {@code true} if there is an active connection.
      *
      * @param context The instance of {@link android.content.Context}.
-     * @return {@code true} if there's an active connection, false otherwise.
+     * @return {@code true} if there's an active connection, {@code false} otherwise.
      * @throws java.lang.SecurityException If a caller doesn't have the {@link android.Manifest.permission#ACCESS_NETWORK_STATE} permission.
      */
     public static boolean isConnected(@NonNull final Context context) {
@@ -84,7 +84,7 @@ public final class OPFUtils {
      *
      * @param context    The instance of {@link android.content.Context}.
      * @param appPackage The package of the checked application.
-     * @return {@code true} if the application is system, false otherwise.
+     * @return {@code true} if the application is system, {@code false} otherwise.
      */
     public static boolean isSystemApp(@NonNull final Context context,
                                       @NonNull final String appPackage) {
@@ -100,7 +100,7 @@ public final class OPFUtils {
     }
 
     /**
-     * Returns true if the application is installed.
+     * Returns {@code true} if the application is installed.
      *
      * @param context    The instance of {@link android.content.Context}.
      * @param appPackage The package of the checked application.
