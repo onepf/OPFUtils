@@ -33,6 +33,9 @@ import java.util.List;
 
 import static android.app.ActivityManager.RunningAppProcessInfo;
 
+/**
+ * Contains common methods for using in the OPF libraries.
+ */
 public final class OPFUtils {
 
     private static final String ITEM_DIVIDER = ", ";
@@ -46,13 +49,11 @@ public final class OPFUtils {
     }
 
     /**
-     * Check current connection state.
-     * <p/>
-     * Having this method return true doesn't mean internet connection is available.
+     * Returns {@code true} if there is an active connection.
      *
-     * @param context Context object to obtain {@link android.net.ConnectivityManager} from.
-     * @return true if there's an active connection, false otherwise.
-     * @throws java.lang.SecurityException if caller doesn't have {@link android.Manifest.permission#ACCESS_NETWORK_STATE} permission.
+     * @param context The instance of {@link android.content.Context}.
+     * @return {@code true} if there's an active connection, {@code false} otherwise.
+     * @throws java.lang.SecurityException If a caller doesn't have the {@link android.Manifest.permission#ACCESS_NETWORK_STATE} permission.
      */
     public static boolean isConnected(@NonNull final Context context) {
         final Object service = context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -62,9 +63,9 @@ public final class OPFUtils {
     }
 
     /**
-     * Get version code of current application.
+     * Returns the version code of the application.
      *
-     * @return If find app - return it's version code, else {@link Integer#MIN_VALUE}.
+     * @return The version code of the application.
      */
     public static int getAppVersion(@NonNull final Context context) {
         try {
@@ -79,11 +80,11 @@ public final class OPFUtils {
     }
 
     /**
-     * Check is application system.
+     * Returns {@code true} if the application is system.
      *
-     * @param context    The current context.
-     * @param appPackage Package of application for verify.
-     * @return True when application is system, false - otherwise.
+     * @param context    The instance of {@link android.content.Context}.
+     * @param appPackage The package of the checked application.
+     * @return {@code true} if the application is system, {@code false} otherwise.
      */
     public static boolean isSystemApp(@NonNull final Context context,
                                       @NonNull final String appPackage) {
@@ -99,11 +100,11 @@ public final class OPFUtils {
     }
 
     /**
-     * Check is application installed on device.
+     * Returns {@code true} if the application is installed.
      *
-     * @param context    The current context.
-     * @param appPackage Package of application for verify.
-     * @return True when application is installed, false - otherwise.
+     * @param context    The instance of {@link android.content.Context}.
+     * @param appPackage The package of the checked application.
+     * @return {@code true} if the application is installed, false otherwise.
      */
     public static boolean isInstalled(@NonNull final Context context,
                                       @NonNull final String appPackage) {
@@ -115,12 +116,24 @@ public final class OPFUtils {
         return false;
     }
 
+    /**
+     * Returns the package name of the application installer.
+     *
+     * @param context The instance of {@link android.content.Context}.
+     * @return The package name of the application installer.
+     */
     @Nullable
     public static String getPackageInstaller(@NonNull final Context context) {
         final PackageManager packageManager = context.getPackageManager();
         return packageManager.getInstallerPackageName(context.getPackageName());
     }
 
+    /**
+     * Returns {@code true} if the current process is main.
+     *
+     * @param context The instance of {@link android.content.Context}.
+     * @return {@code true} if the current process is main.
+     */
     public static boolean isMainProcess(@NonNull final Context context) {
         final int currentPid = android.os.Process.myPid();
         final ActivityManager activityManager = (ActivityManager) context
@@ -139,9 +152,10 @@ public final class OPFUtils {
     }
 
     /**
-     * Convert intent to string.
+     * Converts an {@link android.content.Intent} object to a {@code String}.
      *
-     * @return String representation of intent.
+     * @param intent The converted intent.
+     * @return The string representation of the intent.
      */
     @NonNull
     public static String toString(@Nullable final Intent intent) {
@@ -173,9 +187,10 @@ public final class OPFUtils {
     }
 
     /**
-     * Convert {@code Bundle} to string.
+     * Converts a {@link android.os.Bundle} object to a {@code String}.
      *
-     * @return String representation of bundles.
+     * @param bundle The converted bundle.
+     * @return The string representation of the bundle.
      */
     @NonNull
     public static String toString(@Nullable final Bundle bundle) {

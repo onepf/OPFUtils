@@ -16,6 +16,9 @@
 
 package org.onepf.opfutils.exception;
 
+/**
+ * Throws when the initialize state is not as expected.
+ */
 public class InitException extends IllegalStateException {
 
     public InitException(final boolean isInit) {
