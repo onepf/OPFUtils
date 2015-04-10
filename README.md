@@ -15,7 +15,7 @@ allprojects {
 
 * Add the release dependency:
 ```groovy
-compile 'org.onepf:opfutils:0.1.15'
+compile 'org.onepf:opfutils:0.1.20'
 ```
 
 or the latest snapshot dependency:
