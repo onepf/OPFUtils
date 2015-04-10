@@ -3,7 +3,7 @@ OPFUtils
 
 Common utils used among OPF libraries. Intended for the internal use.
 
-Download the latest JAR or grab via Gradle:
+Download [the latest JAR][opfutils-latest-jar] or grab via Gradle:
 ```groovy
 compile 'org.onepf:opfutils:0.1.20'
 ```
@@ -16,3 +16,5 @@ or Maven:
    <version>0.1.20</version>
 </dependency>
 ```
+
+[opfutils-latest-jar]: https://github.com/onepf/OPFUtils/releases/download/v0.1.20/opfutils-0.1.20.jar
