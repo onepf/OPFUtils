@@ -174,7 +174,7 @@ public final class OPFChecks {
 
         final List<ResolveInfo> receivers = packageManager
                 .queryBroadcastReceivers(broadcastIntent, PackageManager.GET_INTENT_FILTERS);
-        if (receivers.isEmpty()) {
+        if (receivers == null || receivers.isEmpty()) {
             throw new IllegalStateException("No receivers for intent "
                     + OPFUtils.toString(broadcastIntent));
         }
