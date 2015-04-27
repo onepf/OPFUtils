@@ -17,4 +17,4 @@ or Maven:
 </dependency>
 ```
 
-[opfutils-latest-jar]: https://github.com/onepf/OPFUtils/releases/download/v0.1.20/opfutils-0.1.20.jar
+[opfutils-latest-jar]: https://github.com/onepf/OPFUtils/releases/download/v0.1.21/opfutils-0.1.21.jar
