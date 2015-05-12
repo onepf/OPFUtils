@@ -19,6 +19,7 @@ package org.onepf.opfutils;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -170,6 +171,14 @@ public final class OPFChecks {
                                      @Nullable final String receiverName,
                                      @NonNull final Intent broadcastIntent,
                                      @Nullable final String permission) {
+        if (Intent.ACTION_BOOT_COMPLETED.equals(broadcastIntent.getAction())) {
+            //If user has device with root rights, he can disable auto start for your application.
+            //In this case queryBroadcastReceivers() method doesn't return any receivers which is registered on ACTION_BOOT_COMPLETED.
+            //So we check it via package info by receiverName without intent filter checking.
+            checkReceiverInManifest(context, receiverName);
+            return;
+        }
+
         final PackageManager packageManager = context.getPackageManager();
 
         final List<ResolveInfo> receivers = packageManager
@@ -202,5 +211,32 @@ public final class OPFChecks {
                     + " for receiver "
                     + receiverName);
         }
+    }
+
+    private static void checkReceiverInManifest(@NonNull final Context context,
+                                                @Nullable final String receiverName) {
+        if (receiverName == null) {
+            return;
+        }
+
+        final String packageName = context.getPackageName();
+        final PackageManager packageManager = context.getPackageManager();
+        PackageInfo receiversInfo;
+        try {
+            receiversInfo = packageManager.getPackageInfo(
+                    packageName, PackageManager.GET_RECEIVERS);
+        } catch (PackageManager.NameNotFoundException e) {
+            OPFLog.e(e.getMessage());
+            return;
+        }
+        final ActivityInfo[] receivers = receiversInfo.receivers;
+
+        for (ActivityInfo receiver : receivers) {
+            if (receiverName.equals(receiver.name) && packageName.equals(receiver.packageName)) {
+                return;
+            }
+        }
+
+        throw new IllegalStateException("Receiver " + receiverName + " hasn't been declared in AndroidManifest.xml");
     }
 }
