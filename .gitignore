@@ -43,9 +43,11 @@ proguard/
 .idea/dataSources.xml
 .idea/sqlDataSources.xml
 .idea/dynamic.xml
-# and, if using gradle::
-#.idea/gradle.xml
-#.idea/libraries
+.idea/compiler.xml
+.idea/encodings.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/scopes/
 
 ## File-based project format
 *.ipr
