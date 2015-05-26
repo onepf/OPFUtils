@@ -36,6 +36,7 @@ import static android.app.ActivityManager.RunningAppProcessInfo;
 /**
  * Contains common methods for using in the OPF libraries.
  */
+@SuppressWarnings("PMD.EmptyCatchBlock")
 public final class OPFUtils {
 
     private static final String ITEM_DIVIDER = ", ";
@@ -157,15 +158,14 @@ public final class OPFUtils {
      * @param intent The converted intent.
      * @return The string representation of the intent.
      */
+    @SuppressWarnings("PMD.ConsecutiveLiteralAppends")
     @NonNull
     public static String toString(@Nullable final Intent intent) {
         if (intent == null) {
             return "null";
         }
 
-        final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder
-                .append("Intent{action=\"")
+        final StringBuilder stringBuilder = new StringBuilder("Intent{action=\"")
                 .append(intent.getAction())
                 .append('"')
                 .append(ITEM_DIVIDER)

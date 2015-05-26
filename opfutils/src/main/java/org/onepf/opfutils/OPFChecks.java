@@ -35,6 +35,7 @@ import java.util.Locale;
 /**
  * Provides methods for common checks. All methods throw runtime exceptions if a check failed.
  */
+@SuppressWarnings("PMD.EmptyCatchBlock")
 public final class OPFChecks {
 
     private OPFChecks() {
