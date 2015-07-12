@@ -14,10 +14,21 @@
  * limitations under the License.
  */
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
+    }
+}
+
+apply plugin: 'android-sdk-manager'
 apply plugin: 'idea'
 apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.library'
-apply from: 'https://raw.githubusercontent.com/onepf/OPF-mvn-repo/master/opf-commons.gradle'
+apply from: urlCache.get('https://raw.githubusercontent.com/onepf/OPF-mvn-repo/master/opf-commons.gradle')
 
 android {
     compileSdkVersion project.compileSdkVersion
