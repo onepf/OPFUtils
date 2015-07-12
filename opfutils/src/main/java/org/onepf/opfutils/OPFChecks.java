@@ -75,6 +75,37 @@ public final class OPFChecks {
     }
 
     /**
+     * Similar to {@link #checkPermission(Context, String)} but instead of throwing exception returns false if
+     * permission is not granted.
+     *
+     * @return True if supplied permission is granted, false otherwise.
+     */
+    public static boolean hasPermission(@NonNull final Context context,
+                                        @NonNull final String permission) {
+        //TODO Update to new (M preview) permission model https://developer.android.com/preview/features/runtime-permissions.html#coding
+        if (TextUtils.isEmpty(permission)) {
+            throw new IllegalArgumentException("Permission can't be null or empty.");
+        }
+
+        try {
+            final PackageInfo info = context.getPackageManager()
+                    .getPackageInfo(context.getPackageName(), PackageManager.GET_PERMISSIONS);
+            final String[] requestedPermissions = info.requestedPermissions;
+            if (requestedPermissions != null) {
+                for (String requestedPermission : requestedPermissions) {
+                    if (TextUtils.equals(permission, requestedPermission)) {
+                        return true;
+                    }
+                }
+            }
+        } catch (PackageManager.NameNotFoundException ignore) {
+            // ignore
+        }
+
+        return false;
+    }
+
+    /**
      * The same as {@link #checkPermission(android.content.Context, String, java.lang.String)} with the default
      * exception message.
      */
@@ -92,7 +123,9 @@ public final class OPFChecks {
     }
 
     /**
-     * Checks is a permission has been described in the AndroidManifest.xml file.
+     * Checks if supplied permission is requested in AndroidManifest.xml file.
+     * <p>
+     * Throws {@link SecurityException} if it's not.
      *
      * @param context          The instance of {@link android.content.Context}.
      * @param permission       The checked permission.
@@ -101,25 +134,9 @@ public final class OPFChecks {
     public static void checkPermission(@NonNull final Context context,
                                        @NonNull final String permission,
                                        @NonNull final String exceptionMessage) {
-        if (TextUtils.isEmpty(permission)) {
-            throw new IllegalArgumentException("Permission can't be null or empty.");
+        if (!hasPermission(context, permission)) {
+            throw new SecurityException(exceptionMessage);
         }
-
-        try {
-            final PackageInfo info = context.getPackageManager()
-                    .getPackageInfo(context.getPackageName(), PackageManager.GET_PERMISSIONS);
-            final String[] requestedPermissions = info.requestedPermissions;
-            if (requestedPermissions != null) {
-                for (String requestedPermission : requestedPermissions) {
-                    if (TextUtils.equals(permission, requestedPermission)) {
-                        return;
-                    }
-                }
-            }
-        } catch (PackageManager.NameNotFoundException ignore) {
-            // ignore
-        }
-        throw new SecurityException(exceptionMessage);
     }
 
     /**
