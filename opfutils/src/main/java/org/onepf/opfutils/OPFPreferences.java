@@ -22,11 +22,26 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import java.util.Set;
+
 /**
  * The helper class for the easier work with the {@link android.content.SharedPreferences}.
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public class OPFPreferences {
+
+    private static void put(@NonNull final SharedPreferences preferences,
+                            @NonNull final String key,
+                            @NonNull final Set<String> value) {
+        preferences.edit().putStringSet(key, value).apply();
+    }
+
+    @NonNull
+    private static Set<String> getStringSet(@NonNull final SharedPreferences preferences,
+                                            @NonNull final String key,
+                                            @NonNull final Set<String> value) {
+        return preferences.getStringSet(key, value);
+    }
 
     private static void put(@NonNull final SharedPreferences preferences,
                             @NonNull final String key,
@@ -146,6 +161,22 @@ public class OPFPreferences {
     @NonNull
     public SharedPreferences getPreferences() {
         return preferences;
+    }
+
+    public void put(@NonNull final String key, @NonNull final Set<String> value) {
+        put(preferences, key, value);
+    }
+
+    @NonNull
+    public Set<String> getStringSet(@NonNull final String key,
+                                    @NonNull final Set<String> defValue) {
+        return getStringSet(preferences, key, defValue);
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Nullable
+    public Set<String> getStringSet(@NonNull final String key) {
+        return getStringSet(key, null);
     }
 
     public void put(@NonNull final String key, @NonNull final String value) {
