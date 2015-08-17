@@ -5,7 +5,7 @@ Common utils used among OPF libraries. Intended for the internal use.
 
 Download [the latest JAR][opfutils-latest-jar] or grab via Gradle:
 ```groovy
-compile 'org.onepf:opfutils:0.1.24'
+compile 'org.onepf:opfutils:0.1.25'
 ```
 
 or Maven:
@@ -13,8 +13,8 @@ or Maven:
 <dependency>
    <groupId>org.onepf</groupId>
    <artifactId>opfutils</artifactId>
-   <version>0.1.24</version>
+   <version>0.1.25</version>
 </dependency>
 ```
 
-[opfutils-latest-jar]: https://github.com/onepf/OPFUtils/releases/download/v0.1.24/opfutils-0.1.24.jar
+[opfutils-latest-jar]: https://github.com/onepf/OPFUtils/releases/download/v0.1.25/opfutils-0.1.25.jar
