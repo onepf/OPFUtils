@@ -206,4 +206,15 @@ public final class OPFLog {
             Log.println(DEBUG, TAG, getMethodLog(args));
         }
     }
+
+    /**
+     * Logs a stub methods calls.
+     *
+     * @param args The arguments of the logged method.
+     */
+    public static void logStubCall(@Nullable final Object... args) {
+        if (shouldLog(DEBUG)) {
+            Log.println(DEBUG, TAG, "Stub method " + getMethodLog(args));
+        }
+    }
 }
