@@ -23,6 +23,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -124,7 +125,7 @@ public final class OPFChecks {
 
     /**
      * Checks if supplied permission is requested in AndroidManifest.xml file.
-     * <p>
+     * <p/>
      * Throws {@link SecurityException} if it's not.
      *
      * @param context          The instance of {@link android.content.Context}.
@@ -137,6 +138,31 @@ public final class OPFChecks {
         if (!hasPermission(context, permission)) {
             throw new SecurityException(exceptionMessage);
         }
+    }
+
+    /**
+     * Checks if metadata is added in AndroidManifest.xml file.
+     *
+     * @param context     The instance of {@link android.content.Context}.
+     * @param metadataKey The checked metadata key.
+     * @return True if metadata is added, false otherwise.
+     */
+    public static boolean hasMetadata(@NonNull final Context context, @NonNull final String metadataKey) {
+        if (TextUtils.isEmpty(metadataKey)) {
+            throw new IllegalArgumentException("Meta data key can't be null or empty.");
+        }
+
+        try {
+            final PackageInfo info = context.getPackageManager()
+                    .getPackageInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            final Bundle metaData = info.applicationInfo.metaData;
+            if (metaData != null && metaData.get(metadataKey) != null) {
+                return true;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            //ignore
+        }
+        return false;
     }
 
     /**
